@@ -64,7 +64,7 @@ Explanation:
 
 or as batch job
 ```bash
-sbatch parallel/batch-job-omp.sh
+sbatch parallel/batch-job-mpi.sh
 ```
 
 Demonstration of set rendered in parallel
