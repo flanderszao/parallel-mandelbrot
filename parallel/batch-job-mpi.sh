@@ -13,9 +13,6 @@
 WORKDIR="/home/$USER/parallel-mandelbrot"
 cd "$WORKDIR"
 
-# Compila o código
-mpicc parallel/mandelbrot_mpi.c -o mandelbrot_mpi -lm
-
 # Executa os testes com diferentes números de processos
 for processes in 16 32 64; do
     echo "Running with -np $processes"
