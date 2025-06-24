@@ -1,24 +1,22 @@
 #!/bin/bash
-#SBATCH --job-name=omp_test_cases   # Job name
-#SBATCH --nodes=1                   # Ensure all tasks are on one node
-#SBATCH --ntasks=1                  # Only one process (OpenMP uses threads, not tasks)
-#SBATCH --cpus-per-task=16          # Max CPUs available for testing
-#SBATCH --time=01:00:00             # Max total job runtime
-#SBATCH --output=output_%j.log      # Log file (one for the whole job, %j is the job ID)
-#SBATCH --exclusive                 # Allocate the node exclusively (comment out for shared access)
-##SBATCH --mail-type=ALL             # Send email for all job events (start, end, fail)
-##SBATCH --mail-user=example@edu.pucrs.br # Email address for notifications
+#SBATCH --job-name=omp_test_cases
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=16                   # Ajuste conforme o número de CPUs físicos do nó
+#SBATCH --time=01:00:00
+#SBATCH --output=output_%j.log
+#SBATCH --exclusive
+#SBATCH --mail-type=BEGIN,END                # E-mail no início e fim
+#SBATCH --mail-user=v.rafael02@edu.pucrs.br
 
-# Compile code
+# Compila o código
 gcc parallel/mandelbrot_openmp.c -o mandelbrot_omp -fopenmp -lm
 
-# Run test cases
-THREADS=8
-echo "Running with OMP_NUM_THREADS=$THREADS"
-export OMP_NUM_THREADS=$THREADS
-./mandelbrot_omp
+# Executa os testes variando o número de threads de 2 em 2
+for THREADS in 2 4 6 8 10 12 14 16; do
+    echo "Running with OMP_NUM_THREADS=$THREADS"
+    export OMP_NUM_THREADS=$THREADS
+    ./mandelbrot_omp
+done
 
-THREADS=16
-echo "Running with OMP_NUM_THREADS=$THREADS"
-export OMP_NUM_THREADS=$THREADS
-./mandelbrot_omp
+echo "Job $SLURM_JOB_ID finished at $(date)"
