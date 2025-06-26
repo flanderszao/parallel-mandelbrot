@@ -2,7 +2,7 @@
 #SBATCH --job-name=omp_test_cases
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=32                   # Ajuste para incluir Hyper-Threading (16 cores físicos x 2)
+#SBATCH --cpus-per-task=16                   # Ajuste conforme o número de CPUs físicos do nó
 #SBATCH --time=01:00:00
 #SBATCH --output=output_%j.log
 #SBATCH --exclusive
@@ -13,8 +13,7 @@
 gcc parallel/mandelbrot_openmp.c -o mandelbrot_omp -fopenmp -lm
 
 # Executa os testes variando o número de threads de 2 em 2
-# Testa com núcleos físicos (2-16) e com Hyper-Threading (18-32)
-for THREADS in 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32; do
+for THREADS in 2 4 6 8 10 12 14 16; do
     echo "Running with OMP_NUM_THREADS=$THREADS"
     export OMP_NUM_THREADS=$THREADS
     ./mandelbrot_omp
