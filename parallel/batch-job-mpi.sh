@@ -10,8 +10,8 @@
 #SBATCH --mail-type=BEGIN,END
 #SBATCH --mail-user=v.rafael02@edu.pucrs.br
 
-WORKDIR="/home/$USER/parallel-mandelbrot"
-cd "$WORKDIR"
+# Compila o código MPI
+mpicc parallel/mandelbrot_mpi.c -o mandelbrot_mpi -lm
 
 for processes in 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32; do
     echo "Running with -np $processes"
