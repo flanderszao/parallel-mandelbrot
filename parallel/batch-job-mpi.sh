@@ -22,7 +22,7 @@ done
 echo "===== Teste COM Hyper-Threading (até 64 processos) ====="
 for processes in 34 40 48 56 64; do
     echo "Running with -np $processes"
-    mpirun -np $processes ./mandelbrot_mpi
+    mpirun --oversubscribe -np $processes ./mandelbrot_mpi
 done
 
 echo "Job $SLURM_JOB_ID finished at $(date)"
