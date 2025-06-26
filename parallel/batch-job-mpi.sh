@@ -10,19 +10,31 @@
 #SBATCH --mail-type=BEGIN,END
 #SBATCH --mail-user=v.rafael02@edu.pucrs.br
 
-WORKDIR="/home/$USER/parallel-mandelbrot"
-cd "$WORKDIR"
+# Compila o código MPI
+mpicc parallel/mandelbrot_mpi.c -o mandelbrot_mpi -lm
 
-echo "===== Teste SEM Hyper-Threading (até 32 processos) ====="
-for processes in 2 4 8 16 24 32; do
-    echo "Running with -np $processes"
-    mpirun -np $processes ./mandelbrot_mpi
+echo "===== Teste SEM Hyper-Threading (1 nó, até 16 processos) ====="
+for processes in 2 4 6 8 10 12 14 16; do
+    echo "Running with --ntasks=$processes (1 node)"
+    srun --nodes=1 --ntasks=$processes ./mandelbrot_mpi
 done
 
-echo "===== Teste COM Hyper-Threading (até 64 processos) ====="
-for processes in 34 40 48 56 64; do
-    echo "Running with -np $processes"
-    mpirun -np $processes ./mandelbrot_mpi
+echo "===== Teste COM Hyper-Threading (1 nó, até 32 processos) ====="
+for processes in 18 20 22 24 26 28 30 32; do
+    echo "Running with --ntasks=$processes (1 node with HT)"
+    srun --nodes=1 --ntasks=$processes ./mandelbrot_mpi
+done
+
+echo "===== Teste 2 NÓS SEM Hyper-Threading (até 32 processos) ====="
+for processes in 18 20 22 24 26 28 30 32; do
+    echo "Running with --ntasks=$processes (2 nodes, no HT)"
+    srun --nodes=2 --ntasks=$processes ./mandelbrot_mpi
+done
+
+echo "===== Teste 2 NÓS COM Hyper-Threading (até 64 processos) ====="
+for processes in 34 36 40 48 56 64; do
+    echo "Running with --ntasks=$processes (2 nodes with HT)"
+    srun --nodes=2 --ntasks=$processes ./mandelbrot_mpi
 done
 
 echo "Job $SLURM_JOB_ID finished at $(date)"
