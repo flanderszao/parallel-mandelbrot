@@ -9,13 +9,36 @@
 #SBATCH --mail-type=BEGIN,END                # E-mail no início e fim
 #SBATCH --mail-user=v.rafael02@edu.pucrs.br
 
+# Detecta informações do sistema
+PHYSICAL_CORES=$(lscpu | grep "Core(s) per socket" | awk '{print $4}')
+SOCKETS=$(lscpu | grep "Socket(s)" | awk '{print $2}')
+TOTAL_PHYSICAL_CORES=$((PHYSICAL_CORES * SOCKETS))
+LOGICAL_CORES=$(nproc)
+
+echo "Sistema detectado:"
+echo "  Núcleos físicos por socket: $PHYSICAL_CORES"
+echo "  Sockets: $SOCKETS" 
+echo "  Total de núcleos físicos: $TOTAL_PHYSICAL_CORES"
+echo "  Total de núcleos lógicos (com HT): $LOGICAL_CORES"
+echo ""
+
 # Compila o código
 gcc parallel/mandelbrot_openmp.c -o mandelbrot_omp -fopenmp -lm
 
-# Executa os testes variando o número de threads de 2 em 2
-# Testa com núcleos físicos (2-16) e com Hyper-Threading (18-32)
-for THREADS in 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32; do
-    echo "Running with OMP_NUM_THREADS=$THREADS"
+echo "===== Teste SEM Hyper-Threading (núcleos físicos) ====="
+# Testa apenas com núcleos físicos, de 2 em 2
+for THREADS in $(seq 2 2 $TOTAL_PHYSICAL_CORES); do
+    echo "Running with OMP_NUM_THREADS=$THREADS (physical cores)"
+    export OMP_NUM_THREADS=$THREADS
+    ./mandelbrot_omp
+done
+
+echo ""
+echo "===== Teste COM Hyper-Threading (oversubscribe) ====="
+# Testa com Hyper-Threading (oversubscribe), de 2 em 2
+START_HT=$((TOTAL_PHYSICAL_CORES + 2))
+for THREADS in $(seq $START_HT 2 $LOGICAL_CORES); do
+    echo "Running with OMP_NUM_THREADS=$THREADS (with Hyper-Threading)"
     export OMP_NUM_THREADS=$THREADS
     ./mandelbrot_omp
 done
