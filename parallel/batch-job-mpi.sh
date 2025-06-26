@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=mpi_test_cases
 #SBATCH --nodes=2
-#SBATCH --ntasks=64                   # Permite até 64 processos (HT em 2 nós)
+#SBATCH --ntasks=32                   # Permite até 64 processos (HT em 2 nós)
 #SBATCH --cpus-per-task=1
 #SBATCH --time=01:00:00
 #SBATCH --output=output_%j.log
@@ -16,6 +16,11 @@ mpicc parallel/mandelbrot_mpi.c -o mandelbrot_mpi -lm
 for processes in 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32; do
     echo "Running with -np $processes"
     mpirun -np $processes ./mandelbrot_mpi
+done
+
+for processes in 34 36 38 40 42 44 46 48 50 52 54 56 58 60 62 64; do
+    echo "Running with -np $processes"
+    mpirun --oversubscribe -np $processes ./mandelbrot_mpi
 done
 
 echo "Job $SLURM_JOB_ID finished at $(date)"
