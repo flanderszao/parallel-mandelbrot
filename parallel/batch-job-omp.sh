@@ -12,10 +12,8 @@
 # Compila o código
 gcc parallel/mandelbrot_openmp.c -o mandelbrot_omp -fopenmp -lm
 
-for THREADS in 1; do
-    echo "Running with OMP_NUM_THREADS=$THREADS"
-    export OMP_NUM_THREADS=$THREADS
-    ./mandelbrot_omp
-done
+echo "Running with OMP_NUM_THREADS=$THREADS"
+export OMP_NUM_THREADS=1
+./mandelbrot_omp
 
 echo "Job $SLURM_JOB_ID finished at $(date)"
