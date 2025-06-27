@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH --job-name=mpi_test_cases
-#SBATCH --nodes=2
-#SBATCH --ntasks=32        
-#SBATCH --cpus-per-task=2
+#SBATCH --nodes=1
+#SBATCH --ntasks=16
+#SBATCH --cpus-per-task=1
 #SBATCH --time=01:00:00
 #SBATCH --output=output_%j.log
 #SBATCH --error=error_%j.log
@@ -13,7 +13,7 @@
 # Compila o código MPI
 mpicc parallel/mandelbrot_mpi.c -o mandelbrot_mpi -lm
 
-for processes in 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32; do
+for processes in 2 4 6 8 10 12 14 16; do
     echo "Running with -np $processes"
     mpirun -np $processes ./mandelbrot_mpi
 done
