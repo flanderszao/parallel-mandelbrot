@@ -12,7 +12,7 @@
 # Compila o código
 gcc parallel/mandelbrot_openmp.c -o mandelbrot_omp -fopenmp -lm
 
-for THREADS in 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32; do
+for THREADS in 1; do
     echo "Running with OMP_NUM_THREADS=$THREADS"
     export OMP_NUM_THREADS=$THREADS
     ./mandelbrot_omp
