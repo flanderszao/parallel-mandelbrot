@@ -2,7 +2,7 @@
 #SBATCH --job-name=mpi_test_cases
 #SBATCH --nodes=2
 #SBATCH --ntasks=32                   # Permite até 64 processos (HT em 2 nós)
-#SBATCH --cpus-per-task=1
+#SBATCH --cpus-per-task=2
 #SBATCH --time=01:00:00
 #SBATCH --output=output_%j.log
 #SBATCH --error=error_%j.log
