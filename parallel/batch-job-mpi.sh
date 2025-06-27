@@ -13,7 +13,7 @@
 # Compila o código MPI
 mpicc parallel/mandelbrot_mpi.c -o mandelbrot_mpi -lm
 
-for processes in 2 4 6 8 10 12 14 16; do
+for processes in 10 12 14 16; do
     echo "Running with -np $processes"
     mpirun -np $processes ./mandelbrot_mpi
 done
