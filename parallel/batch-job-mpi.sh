@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=mpi_test_cases
 #SBATCH --nodes=2
-#SBATCH --ntasks=32                   # Permite até 64 processos (HT em 2 nós)
+#SBATCH --ntasks=32        
 #SBATCH --cpus-per-task=2
 #SBATCH --time=01:00:00
 #SBATCH --output=output_%j.log

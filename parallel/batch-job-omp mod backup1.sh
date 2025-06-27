@@ -12,7 +12,6 @@
 # Compila o código
 gcc parallel/mandelbrot_openmp.c -o mandelbrot_omp -fopenmp -lm
 
-# Executa os testes variando o número de threads de 2 em 2
 for THREADS in 2 4 6 8 10 12 14 16; do
     echo "Running with OMP_NUM_THREADS=$THREADS"
     export OMP_NUM_THREADS=$THREADS
