@@ -13,9 +13,9 @@
 # Compila o código MPI
 mpicc parallel/mandelbrot_mpi.c -o mandelbrot_mpi -lm
 
-for processes in 26 28 30 32; do
+for processes in 18 20 22 24; do
     echo "Running with -np $processes"
-    mpirun -np $processes ./mandelbrot_mpi
+    mpirun --oversubscribe -np $processes ./mandelbrot_mpi
 done
 
 echo "Job $SLURM_JOB_ID finished at $(date)"
